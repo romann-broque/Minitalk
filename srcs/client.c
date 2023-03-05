@@ -1,19 +1,18 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   minitalk.h                                         :+:      :+:    :+:   */
+/*   client.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: rbroque <rbroque@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/03/05 21:40:08 by rbroque           #+#    #+#             */
-/*   Updated: 2023/03/05 23:01:38 by rbroque          ###   ########.fr       */
+/*   Created: 2023/03/05 23:17:44 by rbroque           #+#    #+#             */
+/*   Updated: 2023/03/05 23:18:07 by rbroque          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef MINITALK_H
-# define MINITALK_H
+#include "minitalk.h"
 
-# include "libft.h"
-# include <signal.h>
-
-#endif
+int	main(void)
+{
+	ft_printf("This is client !\n");
+}

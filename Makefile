@@ -6,7 +6,7 @@
 #    By: rbroque <rbroque@student.42.fr>            +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2022/12/02 13:20:37 by rbroque           #+#    #+#              #
-#    Updated: 2023/03/05 21:46:36 by rbroque          ###   ########.fr        #
+#    Updated: 2023/03/05 23:22:52 by rbroque          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -16,11 +16,18 @@
 
 SHELL = /usr/bin/bash
 
+###############
+#### TITLE ####
+###############
+
+TITLE = minitalk
+
 ##############
 #### NAME ####
 ##############
 
-NAME = client
+NAME_SERVER = server
+NAME_CLIENT = client
 
 ##############
 #### SRCS ####
@@ -30,7 +37,8 @@ PATH_SRCS += srcs/
 
 # srcs/
 
-MAIN += main.c
+MAIN_SERVER += server.c
+MAIN_CLIENT += client.c
 
 vpath %.c $(PATH_SRCS)
 
@@ -40,7 +48,8 @@ vpath %.c $(PATH_SRCS)
 
 PATH_OBJS = objs
 OBJS_MAND = $(patsubst %.c, $(PATH_OBJS)/%.o, $(SRCS))
-OBJS_MAIN := $(patsubst %.c, $(PATH_OBJS)/%.o, $(MAIN))
+OBJS_MAIN_SERVER := $(patsubst %.c, $(PATH_OBJS)/%.o, $(MAIN_SERVER))
+OBJS_MAIN_CLIENT := $(patsubst %.c, $(PATH_OBJS)/%.o, $(MAIN_CLIENT))
 
 #############
 #### LIB ####
@@ -106,37 +115,42 @@ BLUE='\033[1;36m'
 NC='\033[0m' # No Color
 
 ifndef ECHO
-T := $(words $(SRCS) $(MAIN))
-T_BONUS := $(words $(SRCS_BONUS) $(BONUS_MAIN))
+T := $(words $(SRCS) $(MAIN_CLIENT) $(MAIN_SERVER))
 N := x
-N_BONUS := x
 C = $(words $N)$(eval N := x $N)
-C_BONUS = $(words $(N_BONUS))$(eval N_BONUS := x $(N_BONUS))
 ECHOC = echo -ne "\r\033[2K"
 ECHO = $(ECHOC) $(ORANGE) "[`expr $C '*' 100 / $T`%]"
-ECHO_BONUS = $(ECHOC) $(ORANGE) "[`expr $(C_BONUS) '*' 100 / $(T_BONUS)`%]"
 endif
 
 ###############
 #### RULES ####
 ###############
 
-all: $(LIBFT) $(NAME)
+all: $(LIBFT) $(NAME_SERVER) $(NAME_CLIENT)
 
 # LIBFT
 
 $(LIBFT):
 	echo -e $(BLUE) "\n====> Building libft.a <===="$(NC)"\n"
 	$(MAKE) -sC $(LIB_FOLDER)
-	echo -e $(BLUE) "\n====> Building $(NAME) <===="$(NC)"\n"
+	echo -e $(BLUE) "\n====> Building $(TITLE) <===="$(NC)"\n"
 
 # MINITALK
 
-$(NAME): $(OBJS_MAND) $(OBJS_MAIN)
-	$(CC) $(CFLAGS) $(OBJS_MAND) $(OBJS_MAIN) -o $(NAME) $(INCLUDES) $(LIBFT)
-	$(ECHOC) $(GREEN) "--> $(NAME) COMPILED !"$(NC)"\n\n"
+$(NAME_SERVER): $(OBJS_MAND) $(OBJS_MAIN_SERVER)
+	$(CC) $(CFLAGS) $(OBJS_MAND) $(OBJS_MAIN_SERVER) -o $(NAME_SERVER) $(INCLUDES) $(LIBFT)
+	$(ECHOC) $(GREEN) "--> $(NAME_SERVER) COMPILED !"$(NC)"\n\n"
 
-$(OBJS_MAIN): $(PATH_OBJS)/%.o: %.c $(HEADERS) $(MAKEFILE)
+$(NAME_CLIENT): $(OBJS_MAND) $(OBJS_MAIN_CLIENT)
+	$(CC) $(CFLAGS) $(OBJS_MAND) $(OBJS_MAIN_CLIENT) -o $(NAME_CLIENT) $(INCLUDES) $(LIBFT)
+	$(ECHOC) $(GREEN) "--> $(NAME_CLIENT) COMPILED !"$(NC)"\n\n"
+
+$(OBJS_MAIN_SERVER): $(PATH_OBJS)/%.o: %.c $(HEADERS) $(MAKEFILE)
+	$(ECHO) $(ORANGE) "Compiling $<"
+	mkdir -p $(PATH_OBJS)
+	$(CC) $(CFLAGS) -c $< -o $@ $(INCLUDES) -O3
+
+$(OBJS_MAIN_CLIENT): $(PATH_OBJS)/%.o: %.c $(HEADERS) $(MAKEFILE)
 	$(ECHO) $(ORANGE) "Compiling $<"
 	mkdir -p $(PATH_OBJS)
 	$(CC) $(CFLAGS) -c $< -o $@ $(INCLUDES) -O3
@@ -159,14 +173,16 @@ clean:
 	$(ECHOC) $(GREEN) "--> .o files deleted !"$(NC)"\n"
 
 fclean: clean
-	$(ECHOC) $(YELLOW) "Cleaning up $(NAME)..." $(NC)
+	$(ECHOC) $(YELLOW) "Cleaning up $(TITLE)..." $(NC)
 	$(MAKE) -sC $(LIB_FOLDER) fclean > /dev/null
-	$(RM) $(NAME)
-	$(ECHOC) $(GREEN) "--> $(NAME) deleted !"$(NC)"\n"
+	$(RM) $(NAME_SERVER)
+	$(RM) $(NAME_CLIENT)
+	$(ECHOC) $(GREEN) "--> $(NAME_SERVER) deleted !"$(NC)"\n"
+	$(ECHOC) $(GREEN) "--> $(NAME_CLIENT) deleted !"$(NC)"\n"
 
 re: fclean
 	echo -e $(YELLOW) "\nRebuilding..." $(NC)
 	$(MAKE) -s
 
 .PHONY: all clean fclean re run
-.SILENT: $(NAME) $(LIBFT) $(OBJS_MAND) $(OBJS_MAIN) run clean fclean re
+.SILENT: $(NAME_SERVER) $(NAME_CLIENT) $(LIBFT) $(OBJS_MAND) $(OBJS_MAIN_SERVER) $(OBJS_MAIN_CLIENT) run clean fclean re
