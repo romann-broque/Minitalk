@@ -6,7 +6,7 @@
 /*   By: rbroque <rbroque@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/05 23:17:44 by rbroque           #+#    #+#             */
-/*   Updated: 2023/03/07 14:17:05 by rbroque          ###   ########.fr       */
+/*   Updated: 2023/03/07 14:43:36 by rbroque          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,16 +43,19 @@ void	send_signal(const int pid, const int sig, const char *sig_name)
 
 void	send_char(const int pid, const char c)
 {
-	int	sig;
+	size_t	i;
+	int		sig;
 
+	i = 0;
 	sig = c;
-	while (sig != 0)
+	while (i < 8 * sizeof(char))
 	{
 		if (sig & 1)
-			send_signal(pid, SIGUSR1, "SIGUSR1");
-		else
 			send_signal(pid, SIGUSR2, "SIGUSR2");
+		else
+			send_signal(pid, SIGUSR1, "SIGUSR1");
 		sig = (sig >> 1);
+		++i;
 	}
 }
 
@@ -63,6 +66,7 @@ void	send_str(const int pid, const char *str)
 		send_char(pid, *str);
 		++str;
 	}
+	send_char(pid, *str);
 }
 
 int	main(int ac, char **av)

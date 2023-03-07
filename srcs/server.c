@@ -6,7 +6,7 @@
 /*   By: rbroque <rbroque@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/05 21:39:01 by rbroque           #+#    #+#             */
-/*   Updated: 2023/03/07 14:18:08 by rbroque          ###   ########.fr       */
+/*   Updated: 2023/03/07 14:20:32 by rbroque          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,20 +40,3 @@ int	main(void)
 		continue ;
 	return (EXIT_SUCCESS);
 }
-
-// int	main(void)
-// {
-// 	struct sigaction	sigact;
-
-// 	sigemptyset(&sigact.sa_mask);
-// 	sigaddset(&sigact.sa_mask, SIGUSR1);
-// 	sigaddset(&sigact.sa_mask, SIGUSR2);
-// 	sigact.sa_handler = sig_handler;
-// 	sigaction(SIGUSR1, &sigact, NULL);
-// 	sigaction(SIGUSR2, &sigact, NULL);
-// 	ft_printf("This is server !\n");
-// 	ft_printf("pid -> %d\n", getpid());
-// 	while (true)
-// 		continue ;
-// 	return (EXIT_SUCCESS);
-// }
