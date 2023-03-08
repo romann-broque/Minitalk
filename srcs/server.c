@@ -6,7 +6,7 @@
 /*   By: rbroque <rbroque@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/05 21:39:01 by rbroque           #+#    #+#             */
-/*   Updated: 2023/03/08 18:20:31 by rbroque          ###   ########.fr       */
+/*   Updated: 2023/03/08 20:22:33 by rbroque          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,7 +23,7 @@ void	init_data(t_data *data)
 
 void	reset_data(t_data *data)
 {
-	free(data->final_str);
+	// free(data->final_str);
 	init_data(data);
 }
 
@@ -55,7 +55,7 @@ void	add_byte(const int sig_nb)
 	{
 		if (str->curr_byte == 0x00)
 		{
-			ft_printf("final_str -> %s\n", str->final_str);
+			ft_printf("%s\n", str->final_str);
 			reset_data(str);
 		}
 		else
@@ -69,7 +69,7 @@ void	add_byte(const int sig_nb)
 
 void	server_action(int sig_nb, siginfo_t *siginfo, void *context)
 {
-	signal_answer(sig_nb, siginfo);
+	send_ping_to_client(sig_nb, siginfo);
 	add_byte(sig_nb);
 	(void)context;
 }
@@ -80,9 +80,6 @@ void	init_sigact(void)
 
 	sigact.sa_sigaction = server_action;
 	sigact.sa_flags = SA_SIGINFO;
-	sigemptyset(&sigact.sa_mask);
-	sigaddset(&sigact.sa_mask, SIGUSR1);
-	sigaddset(&sigact.sa_mask, SIGUSR2);
 	sigaction(SIGUSR1, &sigact, NULL);
 	sigaction(SIGUSR2, &sigact, NULL);
 }

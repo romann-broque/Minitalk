@@ -6,7 +6,7 @@
 /*   By: rbroque <rbroque@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/05 21:40:08 by rbroque           #+#    #+#             */
-/*   Updated: 2023/03/08 18:21:18 by rbroque          ###   ########.fr       */
+/*   Updated: 2023/03/08 20:10:59 by rbroque          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,7 +25,8 @@ typedef struct s_data
 
 // signal.c
 
+void	waiting_for_signal(void);
 void	send_signal(const int pid, const int sig, const char *sig_name);
-void	signal_answer(int sig_nb, siginfo_t *siginfo);
+void	send_ping_to_client(int sig_nb, siginfo_t *siginfo);
 
 #endif
