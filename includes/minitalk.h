@@ -6,7 +6,7 @@
 /*   By: rbroque <rbroque@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/05 21:40:08 by rbroque           #+#    #+#             */
-/*   Updated: 2023/03/07 20:56:16 by rbroque          ###   ########.fr       */
+/*   Updated: 2023/03/08 03:15:26 by rbroque          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,8 +22,6 @@ typedef struct s_data
 	char		curr_byte;
 	char		*final_str;
 }				t_data;
-
-t_data	g_string_info;
 
 // signal.c
 
