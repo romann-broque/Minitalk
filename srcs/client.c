@@ -6,7 +6,7 @@
 /*   By: rbroque <rbroque@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/05 23:17:44 by rbroque           #+#    #+#             */
-/*   Updated: 2023/03/07 14:48:37 by rbroque          ###   ########.fr       */
+/*   Updated: 2023/03/08 17:29:02 by rbroque          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,17 +15,17 @@
 void	send_char(const int pid, const char c)
 {
 	size_t	i;
-	int		sig;
+	uint8_t	byte;
 
 	i = 0;
-	sig = c;
+	byte = c;
 	while (i < 8 * sizeof(char))
 	{
-		if (sig & 1)
+		if (byte & 1)
 			send_signal(pid, SIGUSR2, "SIGUSR2");
 		else
 			send_signal(pid, SIGUSR1, "SIGUSR1");
-		sig = (sig >> 1);
+		byte >>= 1;
 		++i;
 	}
 }
@@ -49,7 +49,8 @@ int	main(int ac, char **av)
 	if (ac > 2)
 	{
 		pid = ft_atoi(av[1]);
-		send_str(pid, av[2]);
+		if (pid > -1)
+			send_str(pid, av[2]);
 	}
 	return (EXIT_SUCCESS);
 }
