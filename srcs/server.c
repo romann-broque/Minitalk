@@ -6,31 +6,13 @@
 /*   By: rbroque <rbroque@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/05 21:39:01 by rbroque           #+#    #+#             */
-/*   Updated: 2023/03/08 20:22:33 by rbroque          ###   ########.fr       */
+/*   Updated: 2023/03/09 15:07:52 by rbroque          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minitalk.h"
 
 t_data	g_string_info;
-
-void	init_data(t_data *data)
-{
-	data->index_bit = 0;
-	data->curr_byte = 0x00;
-	data->final_str = NULL;
-}
-
-void	reset_data(t_data *data)
-{
-	// free(data->final_str);
-	init_data(data);
-}
-
-uint8_t	get_bit(const int nb)
-{
-	return (nb == SIGUSR2);
-}
 
 void	add_char(t_data *str_info)
 {
@@ -40,6 +22,16 @@ void	add_char(t_data *str_info)
 	new_str[0] = c;
 	new_str[1] = '\0';
 	str_info->final_str = ft_strnjoin(str_info->final_str, new_str, sizeof(char));
+}
+
+void	send_ping_to_client(siginfo_t *siginfo)
+{
+	// static pid_t	last_pid = -1;
+	const pid_t		client_pid = siginfo->si_pid;
+
+	// if (last_pid != client_pid)
+	// 	reset_data(&g_string_info);
+	kill(client_pid, SIGUSR1);
 }
 
 void	add_byte(const int sig_nb)
@@ -69,19 +61,9 @@ void	add_byte(const int sig_nb)
 
 void	server_action(int sig_nb, siginfo_t *siginfo, void *context)
 {
-	send_ping_to_client(sig_nb, siginfo);
+	send_ping_to_client(siginfo);
 	add_byte(sig_nb);
 	(void)context;
-}
-
-void	init_sigact(void)
-{
-	struct sigaction	sigact;
-
-	sigact.sa_sigaction = server_action;
-	sigact.sa_flags = SA_SIGINFO;
-	sigaction(SIGUSR1, &sigact, NULL);
-	sigaction(SIGUSR2, &sigact, NULL);
 }
 
 int	main(void)
@@ -90,7 +72,7 @@ int	main(void)
 	ft_printf("pid -> %d\n", getpid());
 
 	init_data(&g_string_info);
-	init_sigact();
+	init_sigact(server_action);
 	while (true)
 		continue ;
 	return (EXIT_SUCCESS);
