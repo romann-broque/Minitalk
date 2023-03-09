@@ -5,75 +5,80 @@
 /*                                                    +:+ +:+         +:+     */
 /*   By: rbroque <rbroque@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/03/05 21:39:01 by rbroque           #+#    #+#             */
-/*   Updated: 2023/03/09 15:07:52 by rbroque          ###   ########.fr       */
+/*   Created: 2023/03/09 22:43:21 by rbroque           #+#    #+#             */
+/*   Updated: 2023/03/09 23:35:23 by rbroque          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minitalk.h"
 
-t_data	g_string_info;
+t_env	g_env;
 
-void	add_char(t_data *str_info)
+void	add_char(void)
 {
-	const char	c = str_info->curr_byte;
-	char		new_str[2];
+	char	str[2];
 
-	new_str[0] = c;
-	new_str[1] = '\0';
-	str_info->final_str = ft_strnjoin(str_info->final_str, new_str, sizeof(char));
+	str[0] = g_env.curr_char;
+	str[1] = '\0';
+	ft_strjoin(g_env.final_str, str);
 }
 
-void	send_ping_to_client(siginfo_t *siginfo)
+void	init_env(void)
 {
-	// static pid_t	last_pid = -1;
-	const pid_t		client_pid = siginfo->si_pid;
-
-	// if (last_pid != client_pid)
-	// 	reset_data(&g_string_info);
-	kill(client_pid, SIGUSR1);
+	g_env.index = 0;
+	g_env.curr_char = '\0';
+	g_env.final_str = NULL;
 }
 
-void	add_byte(const int sig_nb)
+void	process_byte(void)
 {
-	t_data *const	str = &g_string_info;
-
-	if (str->index_bit < 8)
+	if (g_env.curr_char == END_CHAR)
 	{
-		str->curr_byte |= (get_bit(sig_nb) << str->index_bit);
-		++(str->index_bit);
+		ft_printf("[%s]\n", g_env.final_str);
+		// reset_buffer
+		init_env();
+		kill(g_env.client_pid, SIGUSR1);
 	}
-	if (str->index_bit >= 8)
-	{
-		if (str->curr_byte == 0x00)
-		{
-			ft_printf("%s\n", str->final_str);
-			reset_data(str);
-		}
-		else
-		{
-			add_char(str);
-			str->curr_byte = 0x00;
-			str->index_bit = 0;
-		}
-	}
+	else
+		add_char();
+	g_env.index = 0;
+	g_env.curr_char = '\0';
 }
 
-void	server_action(int sig_nb, siginfo_t *siginfo, void *context)
+void	bit_handler(int sig, siginfo_t *info, void *ucontext)
 {
-	send_ping_to_client(siginfo);
-	add_byte(sig_nb);
-	(void)context;
+	if (sig == SIGUSR1)
+		g_env.curr_char |= (0x01 << g_env.index);
+	++g_env.index;
+	g_env.client_pid = info->si_pid;
+	(void)ucontext;
+}
+
+void	define_catcher(void)
+{
+	struct sigaction	sigact;
+
+	sigact.sa_flags = SA_SIGINFO;
+	sigact.sa_sigaction = bit_handler;
+	sigaction(SIGUSR1, &sigact, NULL);
+	sigaction(SIGUSR2, &sigact, NULL);
+}
+
+void	loop_hander()
+{
+	while (true)
+	{
+		pause();
+		if (g_env.index == CHAR_SIZE)
+			process_byte();
+	}
 }
 
 int	main(void)
 {
-	ft_printf("This is server !\n");
-	ft_printf("pid -> %d\n", getpid());
-
-	init_data(&g_string_info);
-	init_sigact(server_action);
-	while (true)
-		continue ;
-	return (EXIT_SUCCESS);
+	ft_printf("SERVER_PID : %d\n", getpid());
+	init_env();
+	define_catcher();
+	loop_hander();
+	// free
 }
