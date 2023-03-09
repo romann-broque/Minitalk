@@ -6,7 +6,7 @@
 /*   By: rbroque <rbroque@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/07 14:51:05 by rbroque           #+#    #+#             */
-/*   Updated: 2023/03/08 20:24:41 by rbroque          ###   ########.fr       */
+/*   Updated: 2023/03/09 10:45:37 by rbroque          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,6 +33,7 @@ void	waiting_for_signal(void)
 	struct sigaction	sigact;
 
 	sigemptyset(&sigact.sa_mask);
+	sigaddset(&sigact.sa_mask, SIGUSR1);
 	sigact.sa_sigaction = signal_received;
 	sigact.sa_flags = SA_SIGINFO;
 	sigaction(SIGUSR1, &sigact, NULL);

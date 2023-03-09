@@ -6,41 +6,13 @@
 /*   By: rbroque <rbroque@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/05 21:39:01 by rbroque           #+#    #+#             */
-/*   Updated: 2023/03/08 20:22:33 by rbroque          ###   ########.fr       */
+/*   Updated: 2023/03/09 10:49:59 by rbroque          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minitalk.h"
 
 t_data	g_string_info;
-
-void	init_data(t_data *data)
-{
-	data->index_bit = 0;
-	data->curr_byte = 0x00;
-	data->final_str = NULL;
-}
-
-void	reset_data(t_data *data)
-{
-	// free(data->final_str);
-	init_data(data);
-}
-
-uint8_t	get_bit(const int nb)
-{
-	return (nb == SIGUSR2);
-}
-
-void	add_char(t_data *str_info)
-{
-	const char	c = str_info->curr_byte;
-	char		new_str[2];
-
-	new_str[0] = c;
-	new_str[1] = '\0';
-	str_info->final_str = ft_strnjoin(str_info->final_str, new_str, sizeof(char));
-}
 
 void	add_byte(const int sig_nb)
 {
@@ -66,7 +38,6 @@ void	add_byte(const int sig_nb)
 		}
 	}
 }
-
 void	server_action(int sig_nb, siginfo_t *siginfo, void *context)
 {
 	send_ping_to_client(sig_nb, siginfo);

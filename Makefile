@@ -6,7 +6,7 @@
 #    By: rbroque <rbroque@student.42.fr>            +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2022/12/02 13:20:37 by rbroque           #+#    #+#              #
-#    Updated: 2023/03/07 20:04:19 by rbroque          ###   ########.fr        #
+#    Updated: 2023/03/09 10:50:23 by rbroque          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -40,6 +40,7 @@ PATH_SRCS += srcs/
 MAIN_SERVER += server.c
 MAIN_CLIENT += client.c
 SRCS += signal.c
+SRCS += utils.c
 
 vpath %.c $(PATH_SRCS)
 
