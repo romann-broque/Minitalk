@@ -6,7 +6,7 @@
 /*   By: rbroque <rbroque@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/09 22:43:21 by rbroque           #+#    #+#             */
-/*   Updated: 2023/03/09 23:35:23 by rbroque          ###   ########.fr       */
+/*   Updated: 2023/03/10 01:39:46 by rbroque          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,7 @@ void	add_char(void)
 
 	str[0] = g_env.curr_char;
 	str[1] = '\0';
-	ft_strjoin(g_env.final_str, str);
+	g_env.final_str = ft_strnjoin(g_env.final_str, str, sizeof(char));
 }
 
 void	init_env(void)
@@ -34,15 +34,17 @@ void	process_byte(void)
 {
 	if (g_env.curr_char == END_CHAR)
 	{
-		ft_printf("[%s]\n", g_env.final_str);
+		ft_printf("%s\n", g_env.final_str);
 		// reset_buffer
 		init_env();
 		kill(g_env.client_pid, SIGUSR1);
 	}
 	else
+	{
 		add_char();
+		g_env.curr_char = '\0';
+	}
 	g_env.index = 0;
-	g_env.curr_char = '\0';
 }
 
 void	bit_handler(int sig, siginfo_t *info, void *ucontext)
