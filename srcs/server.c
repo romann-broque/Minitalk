@@ -6,7 +6,7 @@
 /*   By: rbroque <rbroque@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/09 22:43:21 by rbroque           #+#    #+#             */
-/*   Updated: 2023/03/10 01:39:46 by rbroque          ###   ########.fr       */
+/*   Updated: 2023/03/10 18:24:06 by rbroque          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,6 +20,7 @@ void	add_char(void)
 
 	str[0] = g_env.curr_char;
 	str[1] = '\0';
+	ft_printf("char --> %c\n", str[0]);
 	g_env.final_str = ft_strnjoin(g_env.final_str, str, sizeof(char));
 }
 
@@ -36,8 +37,8 @@ void	process_byte(void)
 	{
 		ft_printf("%s\n", g_env.final_str);
 		// reset_buffer
-		init_env();
 		kill(g_env.client_pid, SIGUSR1);
+		init_env();
 	}
 	else
 	{
@@ -49,10 +50,17 @@ void	process_byte(void)
 
 void	bit_handler(int sig, siginfo_t *info, void *ucontext)
 {
+	g_env.client_pid = info->si_pid;
 	if (sig == SIGUSR1)
 		g_env.curr_char |= (0x01 << g_env.index);
+	ft_putchar_fd(sig == SIGUSR1 ? '1' : '0', 1);
 	++g_env.index;
-	g_env.client_pid = info->si_pid;
+	if (g_env.index == CHAR_SIZE)
+	{
+		ft_putchar_fd('\n', 1);
+		process_byte();
+	}
+	kill(g_env.client_pid, SIGUSR2);
 	(void)ucontext;
 }
 
@@ -60,6 +68,7 @@ void	define_catcher(void)
 {
 	struct sigaction	sigact;
 
+	sigemptyset(&sigact.sa_mask);
 	sigact.sa_flags = SA_SIGINFO;
 	sigact.sa_sigaction = bit_handler;
 	sigaction(SIGUSR1, &sigact, NULL);
@@ -70,9 +79,10 @@ void	loop_hander()
 {
 	while (true)
 	{
-		pause();
-		if (g_env.index == CHAR_SIZE)
-			process_byte();
+		;
+		// pause();
+		// if (g_env.index == CHAR_SIZE)
+		// 	process_byte();
 	}
 }
 
@@ -84,3 +94,5 @@ int	main(void)
 	loop_hander();
 	// free
 }
+
+// hey
