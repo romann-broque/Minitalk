@@ -12,8 +12,6 @@
 
 #include "minitalk.h"
 
-bool	g_is_waiting;
-
 void	send_char(const int pid, char c)
 {
 	static const int	sig[NB_SIG] = {SIGUSR2, SIGUSR1};
@@ -22,12 +20,10 @@ void	send_char(const int pid, char c)
 	i = 0;
 	while (i < CHAR_SIZE)
 	{
-		g_is_waiting = true;
+		usleep(100);
 		if (kill(pid, sig[c & 1]) == KILL_FAILURE)
 			exit(EXIT_FAILURE);
-		while (g_is_waiting == true)
-			;
-		usleep(100);
+		pause();
 		c >>= 1;
 		++i;
 	}
@@ -41,7 +37,7 @@ void	send_str(const int pid, const char *str)
 		send_char(pid, *str);
 		++str;
 	}
-	send_char(pid, END_CHAR);
+	send_char(pid, END_TRANSMISSION);
 }
 
 void	signal_handler(int signum)
@@ -51,7 +47,10 @@ void	signal_handler(int signum)
 		ft_printf("Message received\n");
 		exit(EXIT_SUCCESS);
 	}
-	g_is_waiting = false;
+	else if (signum == SIGUSR2)
+	{
+		ft_printf("--Bit received\n");
+	}
 }
 
 void	set_catcher(void)

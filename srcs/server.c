@@ -20,7 +20,7 @@ void	add_char(void)
 
 	str[0] = g_env.curr_char;
 	str[1] = '\0';
-	ft_printf("char --> %c\n", str[0]);
+	//ft_printf("char --> %c\n", str[0]);
 	g_env.final_str = ft_strnjoin(g_env.final_str, str, sizeof(char));
 }
 
@@ -33,7 +33,7 @@ void	init_env(void)
 
 void	process_byte(void)
 {
-	if (g_env.curr_char == END_CHAR)
+	if (g_env.curr_char == END_TRANSMISSION)
 	{
 		ft_printf("%s\n", g_env.final_str);
 		// reset_buffer
@@ -43,8 +43,8 @@ void	process_byte(void)
 	else
 	{
 		add_char();
-		g_env.curr_char = '\0';
 	}
+	g_env.curr_char = '\0';
 	g_env.index = 0;
 }
 
@@ -53,14 +53,8 @@ void	bit_handler(int sig, siginfo_t *info, void *ucontext)
 	g_env.client_pid = info->si_pid;
 	if (sig == SIGUSR1)
 		g_env.curr_char |= (0x01 << g_env.index);
-	ft_putchar_fd(sig == SIGUSR1 ? '1' : '0', 1);
+	//ft_putchar_fd(sig == SIGUSR1 ? '1' : '0', 1);
 	++g_env.index;
-	if (g_env.index == CHAR_SIZE)
-	{
-		ft_putchar_fd('\n', 1);
-		process_byte();
-	}
-	kill(g_env.client_pid, SIGUSR2);
 	(void)ucontext;
 }
 
@@ -79,10 +73,11 @@ void	loop_hander()
 {
 	while (true)
 	{
-		;
-		// pause();
-		// if (g_env.index == CHAR_SIZE)
-		// 	process_byte();
+		pause();
+		usleep(100);
+		kill(g_env.client_pid, SIGUSR2);
+		if (g_env.index == CHAR_SIZE)
+			process_byte();
 	}
 }
 
@@ -96,3 +91,4 @@ int	main(void)
 }
 
 // hey
+

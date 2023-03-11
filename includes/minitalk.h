@@ -17,7 +17,7 @@
 # include <signal.h>
 
 # define CHAR_SIZE			8
-# define END_CHAR			'\0'
+# define END_TRANSMISSION	0x04
 # define NB_SIG				2
 # define KILL_FAILURE		-1
 # define EXPECTED_NB_ARG	3
