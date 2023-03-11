@@ -39,7 +39,6 @@ void	send_str(const int pid, const char *str)
 		++str;
 	}
 	send_char(pid, END_TRANSMISSION);
-	pause();
 }
 
 void	signal_handler(int signum)
@@ -47,6 +46,7 @@ void	signal_handler(int signum)
 	if (signum == SIGUSR1)
 	{
 		ft_printf("Message received\n");
+		exit(EXIT_SUCCESS);
 	}
 	else
 	{
@@ -67,5 +67,9 @@ int	main(int ac, char **av)
 		set_catcher();
 		send_str(ft_atoi(av[1]), av[2]);
 	}
+	while (1)
+	{
+		pause();
+	}	
 	return (EXIT_SUCCESS);
 }
