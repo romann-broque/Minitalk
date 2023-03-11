@@ -21,9 +21,6 @@ void	send_char(const int pid, char c)
 	while (i < CHAR_SIZE)
 	{
 		send_signal(pid, sig[c & 1]);
-		//usleep(100);
-		//if (kill(pid, sig[c & 1]) == KILL_FAILURE)
-		//	exit(EXIT_FAILURE);
 		pause();
 		c >>= 1;
 		++i;
@@ -47,6 +44,7 @@ void	signal_handler(int signum)
 	if (signum == SIGUSR1)
 	{
 		ft_printf("Message received\n");
+		exit(EXIT_SUCCESS);
 	}
 	else
 	{
@@ -67,5 +65,5 @@ int	main(int ac, char **av)
 		set_catcher();
 		send_str(ft_atoi(av[1]), av[2]);
 	}
-	return (EXIT_SUCCESS);
+	return (EXIT_FAILURE);
 }
