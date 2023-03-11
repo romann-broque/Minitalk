@@ -15,6 +15,7 @@
 t_env	g_env;
 bool is_waiting = true;
 
+
 void	add_char(void)
 {
 	char	str[2];
@@ -34,6 +35,7 @@ void 	clear_char(void)
 void	init_env(void)
 {
 	clear_char();
+	g_env.client_pid = 0;
 	g_env.final_str = NULL;
 	g_env.end_of_transmission = false;
 }
@@ -52,7 +54,11 @@ void	bit_handler(int sig, siginfo_t *info, void *ucontext)
 	if (is_waiting == true)
 	{
 		is_waiting = false;
-		g_env.client_pid = info->si_pid;
+		if (g_env.client_pid != info->si_pid)
+		{
+			init_env();
+			g_env.client_pid = info->si_pid;
+		}
 		if (sig == SIGUSR1)
 			g_env.curr_char |= (0x01 << g_env.index);
 		//ft_putchar_fd(sig == SIGUSR1 ? '1' : '0', 1);
