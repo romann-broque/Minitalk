@@ -48,19 +48,16 @@ void	send_str(const int pid, const char *str)
 
 void	signal_handler(int signum)
 {
-	if (received == false)
+	received = true;
+	if (signum == SIGUSR1)
 	{
-		received = true;
-		if (signum == SIGUSR1)
-		{
-			ft_printf("Message received\n");
-			exit(EXIT_SUCCESS);
-		}
-		else
-		{
-			char_count++;
-			ft_printf("char received: %d\n", char_count);
-		}
+		ft_printf("Message received\n");
+		exit(EXIT_SUCCESS);
+	}
+	else
+	{
+		char_count++;
+		ft_printf("char received: %d\n", char_count);
 	}
 }
 
