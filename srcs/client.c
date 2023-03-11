@@ -38,6 +38,8 @@ void	send_str(const int pid, const char *str)
 		++str;
 	}
 	send_char(pid, END_TRANSMISSION);
+	usleep(100);
+	pause();
 }
 
 void	signal_handler(int signum)
