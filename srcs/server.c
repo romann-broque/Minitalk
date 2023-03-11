@@ -65,7 +65,7 @@ void	define_catcher(void)
 {
 	struct sigaction	sigact;
 
-	sigact.sa_flags = 0;
+	sigact.sa_flags = SA_SIGINFO;
 	sigact.sa_sigaction = bit_handler;
 	sigemptyset(&sigact.sa_mask);
 	sigaction(SIGUSR1, &sigact, NULL);
@@ -77,7 +77,6 @@ void end_of_transmission_routine()
 	ft_printf("%s\n", g_env.final_str);
 	// reset_buffer
 	usleep(USECONDS_TO_CLOSE);
-	ft_printf("send last signal\n");
 	send_signal(g_env.client_pid, SIGUSR1);
 	listening_loop_laucher();
 }
