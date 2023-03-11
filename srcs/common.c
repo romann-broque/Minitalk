@@ -1,36 +1,21 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   minitalk.h                                         :+:      :+:    :+:   */
+/*   server.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: rbroque <rbroque@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/03/05 21:40:08 by rbroque           #+#    #+#             */
-/*   Updated: 2023/03/10 01:38:24 by rbroque          ###   ########.fr       */
+/*   Created: 2023/03/09 22:43:21 by rbroque           #+#    #+#             */
+/*   Updated: 2023/03/10 18:24:06 by rbroque          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef MINITALK_H
-# define MINITALK_H
+#include "minitalk.h"
 
-# include "libft.h"
-# include <signal.h>
-
-# define CHAR_SIZE			8
-# define END_TRANSMISSION	0x04
-# define NB_SIG				2
-# define KILL_FAILURE		-1
-# define EXPECTED_NB_ARG	3
-# define USECONDS_TO_WAIT	100
-
-typedef struct s_env
+void	send_signal(const int pid, const int signal)
 {
-	size_t		index;
-	int			client_pid;
-	char		curr_char;
-	char		*final_str;
-}				t_env;
+	usleep(USECONDS_TO_WAIT);
+	if (kill(pid, signal) == KILL_FAILURE)
+		exit(EXIT_FAILURE);
+}
 
-void	send_signal(const int pid, const int signal);
-
-#endif

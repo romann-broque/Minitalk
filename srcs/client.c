@@ -20,9 +20,10 @@ void	send_char(const int pid, char c)
 	i = 0;
 	while (i < CHAR_SIZE)
 	{
-		usleep(100);
-		if (kill(pid, sig[c & 1]) == KILL_FAILURE)
-			exit(EXIT_FAILURE);
+		send_signal(pid, sig[c & 1]);
+		//usleep(100);
+		//if (kill(pid, sig[c & 1]) == KILL_FAILURE)
+		//	exit(EXIT_FAILURE);
 		pause();
 		c >>= 1;
 		++i;
@@ -38,7 +39,6 @@ void	send_str(const int pid, const char *str)
 		++str;
 	}
 	send_char(pid, END_TRANSMISSION);
-	usleep(100);
 	pause();
 }
 
@@ -47,9 +47,8 @@ void	signal_handler(int signum)
 	if (signum == SIGUSR1)
 	{
 		ft_printf("Message received\n");
-		exit(EXIT_SUCCESS);
 	}
-	else if (signum == SIGUSR2)
+	else
 	{
 		ft_printf("--Bit received\n");
 	}

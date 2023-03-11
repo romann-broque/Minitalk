@@ -37,6 +37,7 @@ PATH_SRCS += srcs/
 
 # srcs/
 
+SRCS += common.c
 MAIN_SERVER += server.c
 MAIN_CLIENT += client.c
 
@@ -148,17 +149,17 @@ $(NAME_CLIENT): $(OBJS_MAND) $(OBJS_MAIN_CLIENT)
 $(OBJS_MAIN_SERVER): $(PATH_OBJS)/%.o: %.c $(HEADERS) $(MAKEFILE)
 	$(ECHO) $(ORANGE) "Compiling $<"
 	mkdir -p $(PATH_OBJS)
-	$(CC) $(CFLAGS) -c $< -o $@ $(INCLUDES) -O3
+	$(CC) $(CFLAGS) -c $< -o $@ $(INCLUDES)
 
 $(OBJS_MAIN_CLIENT): $(PATH_OBJS)/%.o: %.c $(HEADERS) $(MAKEFILE)
 	$(ECHO) $(ORANGE) "Compiling $<"
 	mkdir -p $(PATH_OBJS)
-	$(CC) $(CFLAGS) -c $< -o $@ $(INCLUDES) -O3
+	$(CC) $(CFLAGS) -c $< -o $@ $(INCLUDES)
 
 $(OBJS_MAND): $(PATH_OBJS)/%.o: %.c $(HEADERS) $(MAKEFILE)
 	$(ECHO) $(ORANGE) "Compiling $<"
 	mkdir -p $(PATH_OBJS)
-	$(CC) $(CFLAGS) -c $< -o $@ $(INCLUDES) -O3
+	$(CC) $(CFLAGS) -c $< -o $@ $(INCLUDES)
 
 run:
 	$(MAKE) -s
