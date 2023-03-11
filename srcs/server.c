@@ -38,11 +38,7 @@ void	process_byte(void)
 		ft_printf("%s\n", g_env.final_str);
 		// reset_buffer
 		init_env();
-		usleep(100);
-		//ft_printf("--> send last signal\n");
-		kill(g_env.client_pid, SIGUSR1);
 		send_signal(g_env.client_pid, SIGUSR1);
-		//ft_printf("========================\n");
 	}
 	else
 	{
@@ -77,12 +73,8 @@ void	loop_hander()
 {
 	while (true)
 	{
-		//ft_printf("before_pause\n");
 		pause();
-		//ft_printf("after_pause\n");
 		send_signal(g_env.client_pid, SIGUSR2);
-		//usleep(100);
-		//kill(g_env.client_pid, SIGUSR2);
 		if (g_env.index == CHAR_SIZE)
 			process_byte();
 	}
