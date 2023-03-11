@@ -14,8 +14,6 @@
 
 void	send_signal(const int pid, const int signal)
 {
-	usleep(USECONDS_TO_WAIT);
 	if (kill(pid, signal) == KILL_FAILURE)
 		exit(EXIT_FAILURE);
 }
-

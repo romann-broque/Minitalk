@@ -26,11 +26,14 @@
 typedef struct s_env
 {
 	size_t		index;
-	int			client_pid;
-	char		curr_char;
 	char		*final_str;
+	int			client_pid;
+	bool		end_of_transmission;
+	char		curr_char;
 }				t_env;
 
 void	send_signal(const int pid, const int signal);
+
+void listening_loop_laucher();
 
 #endif

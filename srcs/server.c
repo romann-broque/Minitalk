@@ -24,28 +24,26 @@ void	add_char(void)
 	g_env.final_str = ft_strnjoin(g_env.final_str, str, sizeof(char));
 }
 
-void	init_env(void)
+void 	clear_char(void)
 {
 	g_env.index = 0;
 	g_env.curr_char = '\0';
+}
+
+void	init_env(void)
+{
+	clear_char();
 	g_env.final_str = NULL;
+	g_env.end_of_transmission = false;
 }
 
 void	process_byte(void)
 {
 	if (g_env.curr_char == END_TRANSMISSION)
-	{
-		ft_printf("%s\n", g_env.final_str);
-		// reset_buffer
-		init_env();
-		send_signal(g_env.client_pid, SIGUSR1);
-	}
+		g_env.end_of_transmission = true;
 	else
-	{
 		add_char();
-	}
-	g_env.curr_char = '\0';
-	g_env.index = 0;
+	clear_char();
 }
 
 void	bit_handler(int sig, siginfo_t *info, void *ucontext)
@@ -69,23 +67,36 @@ void	define_catcher(void)
 	sigaction(SIGUSR2, &sigact, NULL);
 }
 
+void end_of_transmission_routine()
+{
+	ft_printf("%s\n", g_env.final_str);
+	// reset_buffer
+	send_signal(g_env.client_pid, SIGUSR1);
+	listening_loop_laucher();
+}
+
 void	loop_hander()
 {
-	while (true)
+	while (g_env.end_of_transmission == false)
 	{
 		pause();
-		send_signal(g_env.client_pid, SIGUSR2);
 		if (g_env.index == CHAR_SIZE)
 			process_byte();
 	}
+	end_of_transmission_routine();
+}
+
+void listening_loop_laucher()
+{
+	init_env();
+	loop_hander();
 }
 
 int	main(void)
 {
 	ft_printf("SERVER_PID : %d\n", getpid());
-	init_env();
 	define_catcher();
-	loop_hander();
+	listening_loop_laucher();
 	// free
 }
 
