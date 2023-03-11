@@ -12,7 +12,8 @@
 
 #include "minitalk.h"
 
-int bit_count = 0;
+int char_count = 0;
+bool received = false;
 
 void	send_char(const int pid, char c)
 {
@@ -22,8 +23,11 @@ void	send_char(const int pid, char c)
 	i = 0;
 	while (i < CHAR_SIZE)
 	{
-		send_signal(pid, sig[c & 1]);
-		usleep(USECONDS_TO_WAIT);
+		while (received == false)
+		{
+			send_signal(pid, sig[c & 1]);
+		}
+		received = false;
 		c >>= 1;
 		++i;
 	}
@@ -44,14 +48,26 @@ void	send_str(const int pid, const char *str)
 
 void	signal_handler(int signum)
 {
-	(void)signum;
-	ft_printf("Message received\n");
-	exit(EXIT_SUCCESS);
+	if (received == false)
+	{
+		received = true;
+		if (signum == SIGUSR1)
+		{
+			ft_printf("Message received\n");
+			exit(EXIT_SUCCESS);
+		}
+		else
+		{
+			char_count++;
+			ft_printf("char received: %d\n", char_count);
+		}
+	}
 }
 
 void	set_catcher(void)
 {
 	signal(SIGUSR1, signal_handler);
+	signal(SIGUSR2, signal_handler);
 }
 
 int	main(int ac, char **av)

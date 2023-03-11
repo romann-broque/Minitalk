@@ -13,6 +13,7 @@
 #include "minitalk.h"
 
 t_env	g_env;
+bool is_waiting = true;
 
 void	add_char(void)
 {
@@ -48,21 +49,25 @@ void	process_byte(void)
 
 void	bit_handler(int sig, siginfo_t *info, void *ucontext)
 {
-	g_env.client_pid = info->si_pid;
-	if (sig == SIGUSR1)
-		g_env.curr_char |= (0x01 << g_env.index);
-	//ft_putchar_fd(sig == SIGUSR1 ? '1' : '0', 1);
-	++g_env.index;
-	(void)ucontext;
+	if (is_waiting == true)
+	{
+		is_waiting = false;
+		g_env.client_pid = info->si_pid;
+		if (sig == SIGUSR1)
+			g_env.curr_char |= (0x01 << g_env.index);
+		//ft_putchar_fd(sig == SIGUSR1 ? '1' : '0', 1);
+		++g_env.index;
+		(void)ucontext;
+	}
 }
 
 void	define_catcher(void)
 {
 	struct sigaction	sigact;
 
-	sigemptyset(&sigact.sa_mask);
-	sigact.sa_flags = SA_SIGINFO;
+	sigact.sa_flags = 0;
 	sigact.sa_sigaction = bit_handler;
+	sigemptyset(&sigact.sa_mask);
 	sigaction(SIGUSR1, &sigact, NULL);
 	sigaction(SIGUSR2, &sigact, NULL);
 }
@@ -71,6 +76,8 @@ void end_of_transmission_routine()
 {
 	ft_printf("%s\n", g_env.final_str);
 	// reset_buffer
+	usleep(USECONDS_TO_CLOSE);
+	ft_printf("send last signal\n");
 	send_signal(g_env.client_pid, SIGUSR1);
 	listening_loop_laucher();
 }
@@ -79,9 +86,13 @@ void	loop_hander()
 {
 	while (g_env.end_of_transmission == false)
 	{
+		is_waiting = true;
 		pause();
 		if (g_env.index == CHAR_SIZE)
+		{
 			process_byte();
+		}
+		send_signal(g_env.client_pid, SIGUSR2);
 	}
 	end_of_transmission_routine();
 }

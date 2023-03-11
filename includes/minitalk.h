@@ -22,6 +22,7 @@
 # define KILL_FAILURE		-1
 # define EXPECTED_NB_ARG	3
 # define USECONDS_TO_WAIT	100
+# define USECONDS_TO_CLOSE	500
 
 typedef struct s_env
 {
@@ -31,6 +32,7 @@ typedef struct s_env
 	bool		end_of_transmission;
 	char		curr_char;
 }				t_env;
+
 
 void	send_signal(const int pid, const int signal);
 
