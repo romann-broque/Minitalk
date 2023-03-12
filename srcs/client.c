@@ -6,13 +6,13 @@
 /*   By: rbroque <rbroque@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/09 22:44:51 by rbroque           #+#    #+#             */
-/*   Updated: 2023/03/12 01:41:29 by rbroque          ###   ########.fr       */
+/*   Updated: 2023/03/12 13:14:20 by rbroque          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minitalk.h"
 
-bool	received = false;
+bool	g_received = false;
 
 void	send_char(const int pid, char c)
 {
@@ -22,11 +22,9 @@ void	send_char(const int pid, char c)
 	i = 0;
 	while (i < CHAR_SIZE)
 	{
-		while (received == false)
-		{
-			send_signal(pid, sig[c & 1]);
-		}
-		received = false;
+		while (g_received == false)
+			send_signal_to_server(pid, sig[c & 1]);
+		g_received = false;
 		c >>= 1;
 		++i;
 	}
@@ -45,7 +43,7 @@ void	send_str(const int pid, const char *str)
 
 void	signal_handler(int signum)
 {
-	received = true;
+	g_received = true;
 	if (signum == SIGUSR1)
 	{
 		ft_printf("%s\n", MESSAGE_RECEIVED);

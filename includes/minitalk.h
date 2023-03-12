@@ -6,7 +6,7 @@
 /*   By: rbroque <rbroque@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/05 21:40:08 by rbroque           #+#    #+#             */
-/*   Updated: 2023/03/12 03:09:49 by rbroque          ###   ########.fr       */
+/*   Updated: 2023/03/12 13:07:15 by rbroque          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,7 +47,8 @@ typedef struct s_env
 
 // signal_utils.c
 
-void	send_signal(const int pid, const int signal);
+void	send_signal_to_server(const int pid, const int signal);
+void	send_signal_to_client(const int pid, const int signal, t_env *env);
 
 // server_transmission.c
 

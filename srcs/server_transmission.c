@@ -6,7 +6,7 @@
 /*   By: rbroque <rbroque@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/09 22:43:21 by rbroque           #+#    #+#             */
-/*   Updated: 2023/03/12 03:09:14 by rbroque          ###   ########.fr       */
+/*   Updated: 2023/03/12 13:12:19 by rbroque          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,8 @@ void	end_of_transmission_routine(t_env *env)
 		ft_printf("%s", env->final_str);
 	ft_printf("\n");
 	usleep(USECONDS_TO_CLOSE);
-	send_signal(env->client_pid, SIGUSR1);
+	send_signal_to_client(env->client_pid, SIGUSR1, env);
+	free(env->final_str);
 	listening_loop_launcher(env);
 }
 
@@ -30,7 +31,7 @@ void	loop_handler(t_env *env)
 		pause();
 		if (env->index == CHAR_SIZE)
 			process_byte(env);
-		send_signal(env->client_pid, SIGUSR2);
+		send_signal_to_client(env->client_pid, SIGUSR2, env);
 	}
 	end_of_transmission_routine(env);
 }
