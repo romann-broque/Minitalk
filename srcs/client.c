@@ -6,13 +6,12 @@
 /*   By: rbroque <rbroque@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/09 22:44:51 by rbroque           #+#    #+#             */
-/*   Updated: 2023/03/10 18:24:58 by rbroque          ###   ########.fr       */
+/*   Updated: 2023/03/12 00:48:30 by rbroque          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minitalk.h"
 
-int char_count = 0;
 bool received = false;
 
 void	send_char(const int pid, char c)
@@ -35,7 +34,6 @@ void	send_char(const int pid, char c)
 
 void	send_str(const int pid, const char *str)
 {
-	ft_printf("string -> %s; pid -> %d\n", str, pid);
 	while (*str != END_CHAR)
 	{
 		send_char(pid, *str);
@@ -43,7 +41,6 @@ void	send_str(const int pid, const char *str)
 	}
 	send_char(pid, END_TRANSMISSION);
 	pause();
-	ft_printf("NEVER raise this point\n");
 }
 
 void	signal_handler(int signum)
@@ -53,11 +50,6 @@ void	signal_handler(int signum)
 	{
 		ft_printf("Message received\n");
 		exit(EXIT_SUCCESS);
-	}
-	else
-	{
-		char_count++;
-		ft_printf("char received: %d\n", char_count);
 	}
 }
 

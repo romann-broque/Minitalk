@@ -6,7 +6,7 @@
 /*   By: rbroque <rbroque@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/05 21:40:08 by rbroque           #+#    #+#             */
-/*   Updated: 2023/03/10 01:38:24 by rbroque          ###   ########.fr       */
+/*   Updated: 2023/03/12 01:06:16 by rbroque          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,8 +29,9 @@ typedef struct s_env
 	size_t		index;
 	char		*final_str;
 	int			client_pid;
-	bool		end_of_transmission;
 	char		curr_char;
+	bool		end_of_transmission;
+	bool		is_waiting;
 }				t_env;
 
 
