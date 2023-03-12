@@ -1,21 +1,43 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   server.c                                           :+:      :+:    :+:   */
+/*   server_transmission.c                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: rbroque <rbroque@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/09 22:43:21 by rbroque           #+#    #+#             */
-/*   Updated: 2023/03/10 18:24:06 by rbroque          ###   ########.fr       */
+/*   Updated: 2023/03/12 03:09:14 by rbroque          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minitalk.h"
 
-
-void	send_signal(const int pid, const int signal)
+void	end_of_transmission_routine(t_env *env)
 {
-	if (kill(pid, signal) == KILL_FAILURE)
-		exit(EXIT_FAILURE);
-	usleep(USECONDS_TO_WAIT);
+	if (env->final_str != NULL)
+		ft_printf("%s", env->final_str);
+	ft_printf("\n");
+	usleep(USECONDS_TO_CLOSE);
+	send_signal(env->client_pid, SIGUSR1);
+	listening_loop_launcher(env);
+}
+
+void	loop_handler(t_env *env)
+{
+	while (env->end_of_transmission == false)
+	{
+		env->is_waiting = true;
+		pause();
+		if (env->index == CHAR_SIZE)
+			process_byte(env);
+		send_signal(env->client_pid, SIGUSR2);
+	}
+	end_of_transmission_routine(env);
+}
+
+void	listening_loop_launcher(t_env *env)
+{
+	env->is_waiting = true;
+	init_env(env);
+	loop_handler(env);
 }

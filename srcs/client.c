@@ -6,13 +6,13 @@
 /*   By: rbroque <rbroque@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/09 22:44:51 by rbroque           #+#    #+#             */
-/*   Updated: 2023/03/12 00:48:30 by rbroque          ###   ########.fr       */
+/*   Updated: 2023/03/12 01:41:29 by rbroque          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minitalk.h"
 
-bool received = false;
+bool	received = false;
 
 void	send_char(const int pid, char c)
 {
@@ -48,7 +48,7 @@ void	signal_handler(int signum)
 	received = true;
 	if (signum == SIGUSR1)
 	{
-		ft_printf("Message received\n");
+		ft_printf("%s\n", MESSAGE_RECEIVED);
 		exit(EXIT_SUCCESS);
 	}
 }

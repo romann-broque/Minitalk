@@ -6,7 +6,7 @@
 /*   By: rbroque <rbroque@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/05 21:40:08 by rbroque           #+#    #+#             */
-/*   Updated: 2023/03/12 01:06:16 by rbroque          ###   ########.fr       */
+/*   Updated: 2023/03/12 03:09:49 by rbroque          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,8 +21,17 @@
 # define NB_SIG				2
 # define KILL_FAILURE		-1
 # define EXPECTED_NB_ARG	3
+
+// TIME
+
 # define USECONDS_TO_WAIT	100
 # define USECONDS_TO_CLOSE	500
+
+// MESSAGE
+
+# define MESSAGE_RECEIVED	"Message received"
+
+// STRUCT
 
 typedef struct s_env
 {
@@ -34,9 +43,23 @@ typedef struct s_env
 	bool		is_waiting;
 }				t_env;
 
+// FUNCTIONS
+
+// signal_utils.c
 
 void	send_signal(const int pid, const int signal);
 
-void listening_loop_laucher();
+// server_transmission.c
+
+void	end_of_transmission_routine(t_env *env);
+void	loop_handler(t_env *env);
+void	listening_loop_launcher(t_env *env);
+
+// server_process.c
+
+void	init_env(t_env *env);
+void	add_char(char **str, const char c);
+void	clear_char(t_env *env);
+void	process_byte(t_env *env);
 
 #endif

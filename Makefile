@@ -6,7 +6,7 @@
 #    By: rbroque <rbroque@student.42.fr>            +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2022/12/02 13:20:37 by rbroque           #+#    #+#              #
-#    Updated: 2023/03/09 22:44:45 by rbroque          ###   ########.fr        #
+#    Updated: 2023/03/12 03:08:21 by rbroque          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -37,7 +37,9 @@ PATH_SRCS += srcs/
 
 # srcs/
 
-SRCS += common.c
+SRCS += server_process.c
+SRCS += server_transmission.c
+SRCS += signal_utils.c
 MAIN_SERVER += server.c
 MAIN_CLIENT += client.c
 
