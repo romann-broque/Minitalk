@@ -6,7 +6,7 @@
 /*   By: rbroque <rbroque@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/09 22:44:51 by rbroque           #+#    #+#             */
-/*   Updated: 2023/03/12 13:14:20 by rbroque          ###   ########.fr       */
+/*   Updated: 2023/03/12 13:44:07 by rbroque          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,10 +59,15 @@ void	set_catcher(void)
 
 int	main(int ac, char **av)
 {
+	bool	is_valid_pid;
+	int		server_pid;
+
 	if (ac == EXPECTED_NB_ARG)
 	{
 		set_catcher();
-		send_str(ft_atoi(av[1]), av[2]);
+		is_valid_pid = (ft_satoi(av[1], &server_pid) && server_pid != -1);
+		if (is_valid_pid == true)
+			send_str(server_pid, av[2]);
 	}
 	return (EXIT_FAILURE);
 }

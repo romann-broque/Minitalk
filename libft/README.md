@@ -20,6 +20,7 @@ A C-library of usual functions
 ##### Functions from `<stdlib.h>` library
 
 * [`ft_atoi`](srcs/conv/ft_atoi.c)
+* [`ft_atol`](srcs/conv/ft_atol.c)
 * [`ft_calloc`](srcs/memory/ft_calloc.c)
 
 ##### Functions from `<strings.h>` library
@@ -163,3 +164,6 @@ A C-library of usual functions
 
 #### [`ft_log`](srcs/math/ft_log.c)
 > The log function.
+
+#### [`ft_satoi`](srcs/conv/ft_satoi.c)
+> The non_overflow version of ft_atoi. If the number is not an integer, the function returns false and doesn't return the number.

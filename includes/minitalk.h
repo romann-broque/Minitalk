@@ -6,7 +6,7 @@
 /*   By: rbroque <rbroque@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/05 21:40:08 by rbroque           #+#    #+#             */
-/*   Updated: 2023/03/12 13:07:15 by rbroque          ###   ########.fr       */
+/*   Updated: 2023/03/12 13:27:30 by rbroque          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,7 +24,7 @@
 
 // TIME
 
-# define USECONDS_TO_WAIT	100
+# define USECONDS_TO_WAIT	50
 # define USECONDS_TO_CLOSE	500
 
 // MESSAGE
